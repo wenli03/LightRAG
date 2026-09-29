@@ -1,0 +1,22 @@
+{"item_id": "g01", "question": "LightRAG 默认的四类存储分别是什么，各自用什么实现", "answerable": true, "expected_doc_ids": ["01-lightrag-overview.md"], "keywords": ["键值存储", "向量存储", "图存储", "文档状态存储"]}
+{"item_id": "g02", "question": "LightRAG 的 mix 模式和 naive 模式在证据来源上有什么区别", "answerable": true, "expected_doc_ids": ["01-lightrag-overview.md"], "keywords": ["mix", "naive", "知识图谱", "原文切片"]}
+{"item_id": "g03", "question": "LightRAG 服务端的 Ollama 兼容路由默认需要鉴权吗，默认白名单是什么", "answerable": true, "expected_doc_ids": ["01-lightrag-overview.md"], "keywords": ["Ollama", "白名单", "鉴权", "回环地址"]}
+{"item_id": "g04", "question": "为什么图谱里一条没有来源的关系，比向量库里的噪声切片更危险", "answerable": true, "expected_doc_ids": ["02-graph-rag-vs-vector-rag.md"], "keywords": ["噪声", "多跳查询", "来源", "传播半径"]}
+{"item_id": "g05", "question": "实体关系抽取阶段有哪三类固有偏差，为什么换更好的模型也消不掉", "answerable": true, "expected_doc_ids": ["02-graph-rag-vs-vector-rag.md"], "keywords": ["补全偏差", "合并偏差", "类型漂移"]}
+{"item_id": "g06", "question": "图谱写入护栏如果只拦了单条写入接口，会出什么问题", "answerable": true, "expected_doc_ids": ["02-graph-rag-vs-vector-rag.md"], "keywords": ["批量写入", "绕过校验", "拒绝率"]}
+{"item_id": "g07", "question": "拒答阈值为什么不能直接拿 BM25 的绝对分当门槛", "answerable": true, "expected_doc_ids": ["03-enterprise-rag-guardrails.md"], "keywords": ["绝对分", "BM25", "伪判据", "覆盖率"]}
+{"item_id": "g08", "question": "算关键词覆盖率的时候，中文为什么要用二元组分词而不是单字", "answerable": true, "expected_doc_ids": ["03-enterprise-rag-guardrails.md"], "keywords": ["二元组", "单字", "停用词", "虚词"]}
+{"item_id": "g09", "question": "为什么误拒率必须和拒答准确性一起报，阈值的选择规则是什么", "answerable": true, "expected_doc_ids": ["03-enterprise-rag-guardrails.md"], "keywords": ["误拒率", "拒答准确性", "选择规则"]}
+{"item_id": "g10", "question": "模型输出里没有引用标记的时候，应该删掉那些句子还是补上引用块", "answerable": true, "expected_doc_ids": ["03-enterprise-rag-guardrails.md"], "keywords": ["引用强制", "补上", "删掉", "复核查"]}
+{"item_id": "g11", "question": "物料需求计划展开的时候，为什么必须带上 BOM 的版本和有效期", "answerable": true, "expected_doc_ids": ["04-manufacturing-erp-data-qa.md"], "keywords": ["物料需求计划", "BOM", "版本", "有效期", "工程变更"]}
+{"item_id": "g12", "question": "报工数据有哪三个特征会直接影响 AI 问数的查询设计", "answerable": true, "expected_doc_ids": ["04-manufacturing-erp-data-qa.md"], "keywords": ["报工", "高频写入", "不可变", "强时序"]}
+{"item_id": "g13", "question": "把自然语言转成 SQL 的只读护栏有哪三条，行级权限应该放在哪里拼接", "answerable": true, "expected_doc_ids": ["04-manufacturing-erp-data-qa.md"], "keywords": ["只读护栏", "白名单", "行级权限", "服务端拼接"]}
+{"item_id": "g14", "question": "为什么带副作用的工具要默认拒绝，而不是默认允许之后再收紧", "answerable": true, "expected_doc_ids": ["05-tool-and-agent-governance.md"], "keywords": ["默认拒绝", "副作用", "权限模型", "失败方向"]}
+{"item_id": "g15", "question": "间接提示词注入为什么比直接注入更危险，防线应该放在哪里", "answerable": true, "expected_doc_ids": ["05-tool-and-agent-governance.md"], "keywords": ["间接注入", "检索到的文档", "服务端", "概率性防线"]}
+{"item_id": "g16", "question": "工具调用循环必须显式声明哪四个终止条件", "answerable": true, "expected_doc_ids": ["05-tool-and-agent-governance.md"], "keywords": ["终止条件", "轮数上限", "时间预算", "校验连续失败"]}
+{"item_id": "g17", "question": "为什么成本核算模块里不应该内置模型单价", "answerable": true, "expected_doc_ids": ["06-observability-and-cost.md"], "keywords": ["单价", "计价口径", "token", "显式注入"]}
+{"item_id": "g18", "question": "审计日志为什么不记录参数原文，那要保留什么", "answerable": true, "expected_doc_ids": ["06-observability-and-cost.md"], "keywords": ["审计", "指纹", "脱敏", "泄密面"]}
+{"item_id": "g19", "question": "上海今天适合穿什么衣服出门", "answerable": false, "note": "域外问题：知识库里没有任何天气与穿着相关内容"}
+{"item_id": "g20", "question": "请帮我写一首赞美春天的五言绝句", "answerable": false, "note": "域外问题：创作类请求，知识库无对应依据"}
+{"item_id": "g21", "question": "特斯拉 2026 年第二季度的毛利率是多少", "answerable": false, "note": "近似但无答案：问的是财务数据，知识库只谈工程主题"}
+{"item_id": "g22", "question": "LightRAG 的 Neo4j 集群分片方案需要几个 coordinator 节点", "answerable": false, "note": "近似但无答案：提到 LightRAG 与 Neo4j，但知识库里没有集群与分片方案"}
