@@ -28,7 +28,13 @@ Makefile
 # Exclude other projects
 /tests
 /scripts
-/data
+# 上游整体忽略 /data 是对的（那是运行时存储），但本分支有两样东西**必须进镜像**：
+# 离线检索后端要读 data/corpus，构建时的预跑评测要读 data/golden。
+# 写 `/data/*` 而不是 `/data` 才能让下面的反向忽略生效——
+# 整个目录被排除时，遍历器根本不会再进去看子目录。
+/data/*
+!/data/corpus
+!/data/golden
 /dickens
 /reproduce
 /output_complete
