@@ -9,6 +9,7 @@ __pycache__/
 
 # Virtual Environment
 .venv/
+.venv-*/
 venv/
 
 # Enviroment Variable Files
@@ -56,7 +57,19 @@ neo4jWorkDir/
 inputs/
 output/
 rag_storage/
-data/
+# 上游把整个 data/ 当运行时目录忽略，这对上游是对的；但本分支里 data/ 下有两样东西
+# **必须是版本控制的一部分**：语料与 golden set。它们是评测口径的一部分——
+# 语料一改，之前那份 Recall / 误拒率数字立刻作废，所以必须和代码同版本。
+# 用 `data/*` 而不是 `data/` 是为了能对子目录做反向忽略（被忽略的目录 git 不会进去看）。
+data/*
+!data/corpus/
+!data/golden/
+!data/eval_report.json
+# 真实上游冒烟的原始日志：它是"三个挂载点真的接上了"的直接证据，必须进版本控制。
+!data/smoke.log
+# 仪表盘在真实 uvicorn 上跑出来的原始响应（健康检查 / 一次无模型 Key 的作答）。
+!data/demo_health.json
+!data/demo_query.json
 
 # User cumstomized prompt directory
 prompts/entity_type/

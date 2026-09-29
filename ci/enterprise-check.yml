@@ -1,0 +1,41 @@
+name: enterprise-check
+
+# 只跑治理层这一套：它零上游重依赖、零网络、秒级完成，因此适合作为每次提交的硬门禁。
+# 断言三件事：评测能跑出数字、两次运行逐字段一致、护栏测试全绿。
+# 其中"两次运行一致"与"该拒的确实拒了"是负向断言——它们失败时说明的是系统不确定，
+# 而不是"某台机器环境不对"。
+
+on:
+  push:
+    paths:
+      - "enterprise/**"
+      - "tests/enterprise/**"
+      - "data/**"
+      - "scripts/enterprise_check.sh"
+      - ".github/workflows/enterprise-check.yml"
+  pull_request:
+    paths:
+      - "enterprise/**"
+      - "tests/enterprise/**"
+      - "data/**"
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: 安装测试依赖
+        # fastapi / httpx 必须装上：HTTP 级那 16 条安全断言（401 / 429 / 免鉴权端点白名单）
+        # 在缺依赖时会**静默跳过**而不是失败。跳过一组安全断言还报绿，
+        # 是比"没有这组断言"更糟的状态——它会让人以为它过了。
+        run: python -m pip install --upgrade pip pytest pytest-asyncio fastapi httpx
+      - name: 跑门禁脚本
+        run: bash scripts/enterprise_check.sh
+      - name: 上传评测报告
+        uses: actions/upload-artifact@v4
+        with:
+          name: eval-report
+          path: data/eval_report.json

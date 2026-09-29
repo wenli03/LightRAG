@@ -1,0 +1,90 @@
+{
+  "chosen_threshold": 0.4,
+  "corpus": {
+    "avg_chunk_chars": 81.0,
+    "chunk_count": 102,
+    "file_count": 7,
+    "files": [
+      "00-provenance.md",
+      "01-lightrag-overview.md",
+      "02-graph-rag-vs-vector-rag.md",
+      "03-enterprise-rag-guardrails.md",
+      "04-manufacturing-erp-data-qa.md",
+      "05-tool-and-agent-governance.md",
+      "06-observability-and-cost.md"
+    ]
+  },
+  "deterministic": true,
+  "differences": [],
+  "golden": {
+    "path": "golden.jsonl",
+    "sample_size": 22,
+    "validation_problems": []
+  },
+  "index": {
+    "avg_doc_length": 51.157,
+    "b": 0.75,
+    "doc_count": 102,
+    "k1": 1.5,
+    "vocabulary": 3213
+  },
+  "metrics": {
+    "answerable_size": 18,
+    "citation_rate": 1.0,
+    "false_refusal_rate": 0.0,
+    "mean_coverage": 0.514,
+    "mrr": 1.0,
+    "over_answer_rate": 0.0,
+    "recall@1": 1.0,
+    "recall@3": 1.0,
+    "recall@5": 1.0,
+    "refusal_accuracy": 1.0,
+    "sample_size": 22,
+    "unanswerable_size": 4
+  },
+  "runs_compared": 2,
+  "selection_rule": "先要求 over_answer_rate == 0（宁可拒答也不编），再在其中选 false_refusal_rate 最低的阈值",
+  "threshold_sweep": [
+    {
+      "false_refusal_rate": 0.0,
+      "mrr": 1.0,
+      "over_answer_rate": 0.0,
+      "recall@3": 1.0,
+      "refusal_accuracy": 1.0,
+      "threshold": 0.3
+    },
+    {
+      "false_refusal_rate": 0.0,
+      "mrr": 1.0,
+      "over_answer_rate": 0.0,
+      "recall@3": 1.0,
+      "refusal_accuracy": 1.0,
+      "threshold": 0.4
+    },
+    {
+      "false_refusal_rate": 0.1111,
+      "mrr": 1.0,
+      "over_answer_rate": 0.0,
+      "recall@3": 1.0,
+      "refusal_accuracy": 0.9091,
+      "threshold": 0.5
+    },
+    {
+      "false_refusal_rate": 0.3889,
+      "mrr": 1.0,
+      "over_answer_rate": 0.0,
+      "recall@3": 1.0,
+      "refusal_accuracy": 0.6818,
+      "threshold": 0.6
+    },
+    {
+      "false_refusal_rate": 0.8333,
+      "mrr": 1.0,
+      "over_answer_rate": 0.0,
+      "recall@3": 1.0,
+      "refusal_accuracy": 0.3182,
+      "threshold": 0.7
+    }
+  ],
+  "top_k": 5
+}

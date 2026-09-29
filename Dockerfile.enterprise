@@ -1,0 +1,54 @@
+# 演示镜像：治理网关 + 离线检索后端。
+#
+# 与上游 `Dockerfile.lite` 的区别与理由：
+#   1. 不构建上游 WebUI（那个构建需要 bun 与前端依赖树），演示界面用自带的 Gradio 面板；
+#   2. 构建时**预跑一次评测**并把结果留在镜像里，这样访问者点开就能看到数字，
+#      而不是等一个几十秒的冷启动；
+#   3. 默认检索后端是离线 BM25：**镜像不依赖任何外部服务就起得来**。
+#      要接真实上游时把 ENTERPRISE_RETRIEVER 改成 lightrag 并配好模型环境变量即可。
+# 基础镜像做成可覆盖：`registry-1.docker.io` 在部分网络下不可达（本机实测不可达），
+# 需要换国内镜像源时传 `--build-arg BASE_IMAGE=docker.m.daocloud.io/library/python:3.12-slim-bookworm`。
+ARG BASE_IMAGE=python:3.12-slim-bookworm
+FROM ${BASE_IMAGE}
+
+ENV PYTHONUNBUFFERED=1 \
+    PIP_NO_CACHE_DIR=1 \
+    PYTHONDONTWRITEBYTECODE=1 \
+    PYTHONPATH=/app
+
+WORKDIR /app
+
+COPY pyproject.toml setup.py README.md LICENSE ./
+COPY lightrag ./lightrag
+COPY enterprise ./enterprise
+COPY data ./data
+# 刻意不 COPY tests/：测试属于 CI，不属于运行时镜像。
+# 带进去只会让镜像变大，并给"在生产容器里跑 pytest"这种误用开口子。
+COPY docs ./docs
+
+# 索引源做成可覆盖：默认用官方 PyPI（对别人是正确的默认），
+# 但在国内网络上直连 PyPI 会卡在大包下载上（实测 30 分钟没进展），
+# 所以本机构建时传 `--build-arg PIP_INDEX_URL=https://mirrors.aliyun.com/pypi/simple/`。
+ARG PIP_INDEX_URL=https://pypi.org/simple
+RUN pip install --no-cache-dir -i "${PIP_INDEX_URL}" . fastapi "uvicorn[standard]" gradio
+
+# 预跑评测：把「可复现的数字」烤进镜像，避免访问者第一次请求时等冷启动。
+RUN python -m enterprise.eval.run_eval \
+        --corpus data/corpus \
+        --golden data/golden/golden.jsonl \
+        --repeat 2 \
+        --out data/eval_report.json
+
+ENV ENTERPRISE_HOST=0.0.0.0 \
+    ENTERPRISE_PORT=7860 \
+    ENTERPRISE_WHITELIST_PATHS=/health \
+    ENTERPRISE_DAILY_CALLS=200 \
+    ENTERPRISE_RATE_PER_MINUTE=20 \
+    ENTERPRISE_BURST=5 \
+    ENTERPRISE_RETRIEVER=offline \
+    ENTERPRISE_MIN_COVERAGE=0.4
+
+# 9622 是网关本身的端口；7860 是 Gradio 演示面板（ModelScope 创空间与 HF Spaces 的习惯端口）。
+EXPOSE 9622 7860
+
+CMD ["python", "-m", "enterprise.demo_ui"]

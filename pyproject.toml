@@ -210,7 +210,10 @@ Repository = "https://github.com/HKUDS/LightRAG"
 "Bug Tracker" = "https://github.com/HKUDS/LightRAG/issues"
 
 [tool.setuptools.packages.find]
-include = ["lightrag*"]
+# 本仓库对上游唯一的打包改动：把企业治理层 `enterprise` 一起装进去。
+# 不加这一行的后果是「本地跑得通、`pip install .` 之后 import enterprise 失败」——
+# 一个只在部署时才暴露、而且看起来像环境问题的陷阱。
+include = ["lightrag*", "enterprise*"]
 exclude = ["data*", "tests*", "scripts*", "examples*", "dickens*", "reproduce*", "output_complete*", "rag_storage*", "inputs*"]
 
 [tool.setuptools]
